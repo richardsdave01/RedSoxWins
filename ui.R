@@ -4,7 +4,7 @@ library(shiny)
 shinyUI(fluidPage(
 
   # Application title
-  titlePanel("Boston Red Sox - Expected vs. Actual Wins"),
+  titlePanel("Boston Red Sox - Actual vs. Expected Wins"),
 
   # Sidebar with a slider input for years to be analyzed
   sidebarLayout(
