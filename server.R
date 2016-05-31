@@ -1,23 +1,40 @@
 
-# This is the server logic for a Shiny web application.
-# You can find out more about building applications with Shiny here:
-#
-# http://shiny.rstudio.com
-#
 
 library(shiny)
+library(Lahman)
+data("Teams")
+library(dplyr)
+library(ggplot2)
+
+#  create RedSox dataset
+RedSox <-
+        Teams %>% filter(lgID == 'AL' &
+                                 teamID == 'BOS') %>% select(yearID, G, W, R, RA)
+
 
 shinyServer(function(input, output) {
+        
+        yearStats <-
+                filter(RedSox, RedSox$yearID >= input$yearRange[1] &
+                               RedSox$yearID <= input$yearRange[2])
+        ActWins <-
+                yearStats %>% select(yearID, W) %>% mutate(group = "Actual")
+        ExpWins <-
+                yearStats %>% mutate(W = ((R^2) / (R^2 + RA^2)) * G) %>%
+                select(yearID, W) %>% 
+                mutate(group = "Expected")
+        Wins <- rbind(ExpWins, ActWins)
+        
+        
+        output$low <- renderText({ paste("First Year: ", input$yearRange[1]) })
+        output$high <- renderText({ paste("Last Year: ", input$yearRange[2]) })
+        
+  output$winsPlot <- renderPlot({
 
-  output$distPlot <- renderPlot({
-
-    # generate bins based on input$bins from ui.R
-    x    <- faithful[, 2]
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-    # draw the histogram with the specified number of bins
-    hist(x, breaks = bins, col = 'darkgray', border = 'white')
+          ggplot(Wins, aes(x=yearID, y=W, group=group, fill=group)) +
+                  geom_bar(stat = "identity", position = "dodge") +
+                  scale_fill_brewer(palette = "Set1") +
+                  labs(x = "Year", y = "Wins", fill = "")
 
   })
-
 })

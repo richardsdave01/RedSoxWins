@@ -1,10 +1,4 @@
 
-# This is the user-interface definition of a Shiny web application.
-# You can find out more about building applications with Shiny here:
-#
-# http://shiny.rstudio.com
-#
-
 library(shiny)
 
 shinyUI(fluidPage(
@@ -15,7 +9,7 @@ shinyUI(fluidPage(
   # Sidebar with a slider input for years to be analyzed
   sidebarLayout(
     sidebarPanel(
-      sliderInput("year",
+      sliderInput("yearRange",
                   "Range of years to analyze:",
                   min = 1901,
                   max = 2014,
@@ -25,7 +19,10 @@ shinyUI(fluidPage(
 
     # Show a plot of the expected and actual wins vs. year
     mainPanel(
-        plotOutput("winsPlot")
+            textOutput("low"),
+            textOutput("high"),
+        
+            plotOutput("winsPlot")
     )
   )
 ))
