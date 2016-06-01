@@ -1,3 +1,8 @@
+## Developing Data Products class project
+## Author: Dave Richards
+## Date: May 31, 2016
+##
+## ui.R
 
 library(shiny)
 
@@ -17,7 +22,8 @@ shinyUI(fluidPage(
                   sep = "")
     ),
 
-    # Show a plot of the expected and actual wins vs. year
+    # Show minimum & maximum years selected and
+    #   bar plots of the expected and actual wins vs. year
     mainPanel(
             textOutput("low"),
             textOutput("high"),
